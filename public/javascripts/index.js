@@ -18,11 +18,15 @@ function createElement(type, attrs, ...children) {
     return ele;
 }
 
+let questionModal;
+
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded);
 
 async function onDOMContentLoaded() {
     try {
-        response = await fetch('/questions');
+        const response = await fetch('/questions');
+
+        console.log(await response.json());
     } catch (err) {
         console.log(err);
     }
@@ -33,16 +37,35 @@ async function onDOMContentLoaded() {
 
     createQuestionButton.addEventListener('click', onCreateQuestionButtonClick);
     showQuestionModalButton.addEventListener(
-        'click', 
+        'click',
         onShowQuestionModalButtonClick);
+
+    questionModal = document.getElementById('modal-question');
 }
 
 function onShowQuestionModalButtonClick() {
-    const questionModal = document.getElementById('modal-question');
-
     questionModal.showModal();
 }
 
-function onCreateQuestionButtonClick() {
-    
+async function onCreateQuestionButtonClick() {
+    try {
+        const questionTextBox = document.getElementById('question-text');
+
+        console.log(questionTextBox.value);
+
+        await fetch('/questions', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                question: questionTextBox.value
+            })
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+    questionModal.close();
 }

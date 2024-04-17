@@ -9,13 +9,28 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { Question } from './db.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const rootDirectory = dirname(fileURLToPath(import.meta.url));
 const app = express();
 
-app.use(express.static(join(__dirname, '..', 'public')))
 app.use(express.json());
-app.post('/questions/', async (request, response) => {
+app.use(express.static(join(rootDirectory, '..', 'public')));
 
+app.post('/questions', async (request, response) => {
+    try {
+        console.log(request.body.question);
+
+        const added = new Question({
+            question: request.body.question,
+            answers: []
+        });
+
+        await added.save();
+
+        response.json(added);
+    } catch (ex) {
+        console.error(ex);
+        response.status(500).json({ error: "Failed to add question" });
+    }
 });
 
 app.post('/questions/:id/answers/', async (request, response) => {
@@ -25,16 +40,20 @@ app.post('/questions/:id/answers/', async (request, response) => {
         const command = {
             'new': true
         };
-        const result = await Question.findByIdAndUpdate(
+
+        await Question.findByIdAndUpdate(
             request.params.id,
-            update, command);
+            update,
+            command);
+
         response.json({ success: "Added an answer" })
-    } catch (e) {
-        response.status(500).json({ error: "Failed to add answer" })
+    } catch (ex) {
+        console.error(ex);
+        response.status(500).json({ error: "Failed to add answer" });
     }
 });
 
-app.get('/questions/', async (request, response) => {
+app.get('/questions', async (request, response) => {
     response.json(await Question.find());
 });
 
