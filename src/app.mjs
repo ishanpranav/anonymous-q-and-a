@@ -33,7 +33,7 @@ app.post('/questions', async (request, response) => {
     }
 });
 
-app.post('/questions/:id/answers/', async (request, response) => {
+app.post('/questions/:id/answers', async (request, response) => {
     const update = { '$push': { answers: request.body.answer } };
 
     try {

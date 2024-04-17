@@ -2,7 +2,7 @@
 // Copyright (c) 2024 Ishan Pranav
 // Licensed under the MIT license.
 
-let questionModal;
+let questionId;
 
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded);
 
@@ -18,19 +18,31 @@ async function onDOMContentLoaded() {
     }
 
     const createQuestionButton = document.getElementById('create-question');
+    const closeQuestionButton = document.getElementById('close-question');
+    const createAnswerButton = document.getElementById('create-answer');
+    const closeAnswerButton = document.getElementById('close-answer');
     const showQuestionModalButton =
         document.getElementById('btn-show-modal-question');
 
     createQuestionButton.addEventListener('click', onCreateQuestionButtonClick);
+    createAnswerButton.addEventListener('click', onCreateAnswerButtonClick);
+    closeQuestionButton.addEventListener('click', onCloseQuestionButtonClick);
+    closeAnswerButton.addEventListener('click', onCloseAnswerButtonClick);
     showQuestionModalButton.addEventListener(
         'click',
         onShowQuestionModalButtonClick);
+}
 
-    questionModal = document.getElementById('modal-question');
+function getQuestionModal() {
+    return document.getElementById('modal-question');
+}
+
+function getAnswerModal() {
+    return document.getElementById('modal-answer');
 }
 
 function onShowQuestionModalButtonClick() {
-    questionModal.showModal();
+    getQuestionModal().showModal();
 }
 
 async function onCreateQuestionButtonClick() {
@@ -57,7 +69,11 @@ async function onCreateQuestionButtonClick() {
         console.log(err);
     }
 
-    questionModal.close();
+    getQuestionModal().close();
+}
+
+function onCloseQuestionButtonClick() {
+    getQuestionModal().close();
 }
 
 function appendQuestion(question) {
@@ -78,6 +94,7 @@ function appendQuestion(question) {
         unorderedList.appendChild(listItem);
     }
 
+    answerButton.id = question._id;
     answerButton.classList.add('button');
     answerButton.classList.add('submit');
     answerButton.addEventListener('click', onAnswerButtonClick);
@@ -86,6 +103,37 @@ function appendQuestion(question) {
     main.appendChild(answerButton);
 }
 
-function onAnswerButtonClick() {
-    
+function onAnswerButtonClick(e) {
+    questionId = e.target.id;
+
+    getAnswerModal().showModal();
+}
+
+async function onCreateAnswerButtonClick() {
+    try {
+        const answerTextBox = document.getElementById('answer-text');
+
+        console.log(answerTextBox.value);
+
+        let response = await fetch(`/questions/${questionId}/answers`, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                answer: answerTextBox.value
+            })
+        });
+
+        response = await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+
+    getAnswerModal().close();
+}
+
+function onCloseAnswerButtonClick() {
+    getAnswerModal().close();
 }
