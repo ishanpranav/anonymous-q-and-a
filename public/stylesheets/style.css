@@ -1,3 +1,7 @@
+/* style.css */
+/* Copyright (c) 2024 Ishan Pranav */
+/* Licensed under the MIT licensed. */
+
 body {
 	font-family: sans-serif;
     background: #E0E0E1;
@@ -8,6 +12,10 @@ body {
 	width: 500px;
 	margin: auto;
 	text-align: left;
+}
+
+h1 {
+    text-transform: uppercase;  
 }
 
 header {
@@ -40,6 +48,7 @@ article > h3 {
 	border-bottom: 1px dashed black;
 	padding: 0.25em;
 }
+
 .modal {
 	/* TODO: comment display: none out if using showModal */
 	display: none;

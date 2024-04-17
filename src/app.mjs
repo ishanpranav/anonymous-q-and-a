@@ -1,3 +1,7 @@
+// app.mjs
+// Copyright (c) 2024 Ishan Pranav
+// Licensed under the MIT licensed.
+
 import './config.mjs'
 import mongoose from 'mongoose'
 import express from 'express'
