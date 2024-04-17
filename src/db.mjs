@@ -2,12 +2,13 @@
 // Copyright (c) 2024 Ishan Pranav
 // Licensed under the MIT license.
 
-import mongoose from 'mongoose';
+import { connect, model, Schema } from 'mongoose';
 
 console.log("connecting to database", process.env.DSN);
-mongoose.connect(process.env.DSN);
+connect(process.env.DSN);
 
-export const Question = mongoose.model("Questions", new mongoose.Schema({
+/** Represents an answerable question. */
+export const Question = model("Questions", new Schema({
     question: {
         type: String,
         required: true
