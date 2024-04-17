@@ -1,39 +1,38 @@
 // app.mjs
 // Copyright (c) 2024 Ishan Pranav
-// Licensed under the MIT licensed.
+// Licensed under the MIT license.
 
-import './config.mjs'
-import mongoose from 'mongoose'
-import express from 'express'
-import Question from './db.mjs'
-import url from 'url'
-import path from 'path'
+import './config.mjs'; // first
 
-const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
+import express from 'express';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { Question } from './db.mjs';
 
-const app = express()
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const app = express();
 
-app.use(express.static(path.join(__dirname, '..', 'public')))
+app.use(express.static(join(__dirname, '..', 'public')))
 app.use(express.json());
-
-app.post('/questions/', async (req, res) => {
-  // TODO: finish implementation
+app.post('/questions/', async (request, response) => {
+    // TODO: finish implementation
 })
 
-app.post('/questions/:id/answers/', async (req, res) => {
-  const update = { "$push": { answers: req.body.answer } }
-  try {
-    const result = await Question.findByIdAndUpdate(req.params.id, update, { "new": true })
-    res.json({ success: 'Added an answer' })
-  } catch(e) {
-    res.status(500).json({ error: 'Failed to add answer' })
-  }
-})
+app.post('/questions/:id/answers/', async (request, response) => {
+    const update = { '$push': { answers: request.body.answer } };
 
-app.get('/questions/', async (req, res) => {
-  // TODO: finish implementation
-})
+    try {
+        const result = await Question.findByIdAndUpdate(request.params.id, update, { 'new': true })
+        response.json({ success: "Added an answer" })
+    } catch (e) {
+        response.status(500).json({ error: "Failed to add answer" })
+    }
+});
 
+app.get('/questions/', async (request, response) => {
+    response.json(await Question.find());
+});
 
-const port = process.env.PORT || 3000
-app.listen(port, () => {console.log(`Server is listening on ${port}`)})
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => { console.log(`Server is listening on ${port}`) });

@@ -1,16 +1,13 @@
 // db.mjs
 // Copyright (c) 2024 Ishan Pranav
-// Licensed under the MIT licensed.
+// Licensed under the MIT license.
 
 import mongoose from 'mongoose';
 
-const QuestionSchema = new mongoose.Schema({
+console.log("connecting to database", process.env.DSN);
+mongoose.connect(process.env.DSN);
+
+export const Question = mongoose.model("Questions", new mongoose.Schema({
     question: { type: String, required: true },
     answers: [String]
-});
-
-console.log('connecting to database', process.env.DSN)
-mongoose.connect(process.env.DSN)
-
-const Question = mongoose.model("Questions", QuestionSchema)
-export default Question
+}));
