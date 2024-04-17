@@ -8,6 +8,9 @@ console.log("connecting to database", process.env.DSN);
 mongoose.connect(process.env.DSN);
 
 export const Question = mongoose.model("Questions", new mongoose.Schema({
-    question: { type: String, required: true },
+    question: {
+        type: String,
+        required: true
+    },
     answers: [String]
 }));

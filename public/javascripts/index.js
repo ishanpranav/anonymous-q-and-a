@@ -2,8 +2,6 @@
 // Copyright (c) 2024 Ishan Pranav
 // Licensed under the MIT license.
 
-// helper function for creating elements (usage optional)
-
 function createElement(type, attrs, ...children) {
     const ele = document.createElement(type);
 
@@ -20,4 +18,31 @@ function createElement(type, attrs, ...children) {
     return ele;
 }
 
-// TODO: finish client side javascript
+document.addEventListener('DOMContentLoaded', onDOMContentLoaded);
+
+async function onDOMContentLoaded() {
+    try {
+        response = await fetch('/questions');
+    } catch (err) {
+        console.log(err);
+    }
+
+    const createQuestionButton = document.getElementById('create-question');
+    const showQuestionModalButton =
+        document.getElementById('btn-show-modal-question');
+
+    createQuestionButton.addEventListener('click', onCreateQuestionButtonClick);
+    showQuestionModalButton.addEventListener(
+        'click', 
+        onShowQuestionModalButtonClick);
+}
+
+function onShowQuestionModalButtonClick() {
+    const questionModal = document.getElementById('modal-question');
+
+    questionModal.showModal();
+}
+
+function onCreateQuestionButtonClick() {
+    
+}

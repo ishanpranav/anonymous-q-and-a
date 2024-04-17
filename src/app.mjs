@@ -15,14 +15,19 @@ const app = express();
 app.use(express.static(join(__dirname, '..', 'public')))
 app.use(express.json());
 app.post('/questions/', async (request, response) => {
-    // TODO: finish implementation
-})
+
+});
 
 app.post('/questions/:id/answers/', async (request, response) => {
     const update = { '$push': { answers: request.body.answer } };
 
     try {
-        const result = await Question.findByIdAndUpdate(request.params.id, update, { 'new': true })
+        const command = {
+            'new': true
+        };
+        const result = await Question.findByIdAndUpdate(
+            request.params.id,
+            update, command);
         response.json({ success: "Added an answer" })
     } catch (e) {
         response.status(500).json({ error: "Failed to add answer" })

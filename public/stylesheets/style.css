@@ -50,8 +50,6 @@ article > h3 {
 }
 
 .modal {
-	/* TODO: comment display: none out if using showModal */
-	display: none;
 	position: fixed;
 	top: 0px;
 	left: 0px;
@@ -60,11 +58,6 @@ article > h3 {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-.modal.open {
-	display: block;
-}
-
-/* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
     margin: 25% auto; /* 15% from the top and centered */
