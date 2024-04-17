@@ -3,6 +3,7 @@
 // Licensed under the MIT license.
 
 let questionId;
+const unorderedLists = {};
 
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded);
 
@@ -47,24 +48,18 @@ function onShowQuestionModalButtonClick() {
 
 async function onCreateQuestionButtonClick() {
     try {
-        const questionTextBox = document.getElementById('question-text');
-
-        console.log(questionTextBox.value);
-
-        let response = await fetch('/questions', {
+        const response = await fetch('/questions', {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                question: questionTextBox.value
+                question:  document.getElementById('question-text').value
             })
         });
 
-        response = await response.json();
-
-        appendQuestion(response);
+        appendQuestion(await response.json());
     } catch (err) {
         console.log(err);
     }
@@ -87,12 +82,10 @@ function appendQuestion(question) {
     answerButton.value = "Add an Answer";
 
     for (const answer of question.answers) {
-        const listItem = document.createElement('li');
-
-        listItem.textContent = answer;
-
-        unorderedList.appendChild(listItem);
+        appendAnswer(unorderedList, answer);
     }
+
+    unorderedLists[question._id] = unorderedList;
 
     answerButton.id = question._id;
     answerButton.classList.add('button');
@@ -103,6 +96,14 @@ function appendQuestion(question) {
     main.appendChild(answerButton);
 }
 
+function appendAnswer(unorderedList, answer) {
+    const listItem = document.createElement('li');
+
+    listItem.textContent = answer;
+
+    unorderedList.appendChild(listItem);
+}
+
 function onAnswerButtonClick(e) {
     questionId = e.target.id;
 
@@ -111,22 +112,21 @@ function onAnswerButtonClick(e) {
 
 async function onCreateAnswerButtonClick() {
     try {
-        const answerTextBox = document.getElementById('answer-text');
-
-        console.log(answerTextBox.value);
-
-        let response = await fetch(`/questions/${questionId}/answers`, {
+        const answer = document.getElementById('answer-text').value;
+        const response = await fetch(`/questions/${questionId}/answers`, {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                answer: answerTextBox.value
+                answer: answer
             })
         });
 
-        response = await response.json();
+        await response.json();
+
+        appendAnswer(unorderedLists[questionId], answer);
     } catch (err) {
         console.log(err);
     }

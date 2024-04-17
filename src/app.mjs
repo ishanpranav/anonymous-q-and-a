@@ -17,8 +17,6 @@ app.use(express.static(join(rootDirectory, '..', 'public')));
 
 app.post('/questions', async (request, response) => {
     try {
-        console.log(request.body.question);
-
         const added = new Question({
             question: request.body.question,
             answers: []
@@ -46,7 +44,7 @@ app.post('/questions/:id/answers', async (request, response) => {
             update,
             command);
 
-        response.json({ success: "Added an answer" })
+        response.json({ success: "Added an answer" });
     } catch (ex) {
         console.error(ex);
         response.status(500).json({ error: "Failed to add answer" });
