@@ -5,4 +5,4 @@ Applied Internet Technology course.
 
 ## License
 
-This responsibility with the [MIT](LICENSE.txt) license.
+This repository is licensed with the [MIT](LICENSE.txt) license.
